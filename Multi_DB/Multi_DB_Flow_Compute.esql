@@ -1,0 +1,37 @@
+CREATE COMPUTE MODULE Multi_DB_Flow_Compute
+	
+	DECLARE Indhu_odsn EXTERNAL CHARACTER '';
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+			DECLARE a CHARACTER;
+			DECLARE resultset ROW;
+			DECLARE b CHARACTER;
+			DECLARE resultset1 ROW;
+			
+			set a = 'select * from DEPT_TABLE';
+			set b = 'select * from EMP';
+			SET resultset.data[] = PASSTHRU(b to Database.{'Rajesh_DSN'});
+			SET resultset1.data[] = PASSTHRU(a to Database.{'Indhu_odsn'});
+    	
+		set OutputRoot.JSON.Data.company.emp = resultset;
+		set OutputRoot.JSON.Data.company.dept = resultset1;
+		--SET OutputRoot=InputRoot;
+	END;
+END MODULE;
