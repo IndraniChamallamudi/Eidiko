@@ -1,0 +1,10 @@
+
+
+CREATE FILTER MODULE time_msg_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		RETURN TRUE;
+		return false;
+	END;
+
+END MODULE;
