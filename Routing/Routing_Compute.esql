@@ -1,0 +1,22 @@
+
+
+CREATE COMPUTE MODULE Routing_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		DECLARE age INTEGER;
+		DECLARE res REFERENCE TO InputRoot.XMLNSC.age;
+		
+		IF (age=10) THEN
+			SET OutputLocalEnvironment.Destination.RouterList.DestinationData[1].labelName = 'l1';
+		ELSEIF (age>10) THEN
+			SET OutputLocalEnvironment.Destination.RouterList.DestinationData[2].labelName = 'l2';
+		ELSE
+			SET OutputLocalEnvironment.Destination.RouterList.DestinationData[3].labelName = 'l3';
+		END IF;	
+	END;
+END MODULE;
